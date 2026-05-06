@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+
+import React, { useContext, useState } from "react";
 import assets from "../assets/assets";
+import { AuthContext } from "../../context/AuthContext";
 
 const LoginPage = () => {
 
@@ -10,6 +12,8 @@ const LoginPage = () => {
   const [bio, setBio] = useState("");
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
 
+  const { login } = useContext(AuthContext);
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
 
@@ -18,7 +22,11 @@ const LoginPage = () => {
       return;
     }
 
-    console.log({ fullName, email, password, bio });
+    if (currState === "Sign up") {
+      login("signup", { fullName, email, password, bio });
+    } else {
+      login("login", { email, password });
+    }
   };
 
   return (
@@ -29,14 +37,14 @@ const LoginPage = () => {
       backdrop-blur-2xl px-4"
     >
 
-      {/* ---------- LEFT ---------- */}
+      {/* LEFT */}
       <img
         src={assets.logo_big}
         alt=""
         className="w-[min(30vw,250px)]"
       />
 
-      {/* ---------- RIGHT ---------- */}
+      {/* RIGHT */}
       <form
         onSubmit={onSubmitHandler}
         className="border-2 bg-white/10 text-white
